@@ -3,106 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobile Number and OTP Input</title>
+    <title>Tiranga Game Interface</title>
     <style>
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f4f4f4;
             font-family: Arial, sans-serif;
+            background-color: #0a1440;
+            margin: 0;
+            padding: 0;
+            color: white;
         }
 
         .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            text-align: center;
             padding: 20px;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
         }
 
-        .mobile-input {
+        .wallet {
+            background-color: #233469;
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 300px;
+            margin: 0 auto 20px;
+        }
+
+        .wallet button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .wallet button.withdraw {
+            background-color: #ff4c4c;
+            color: white;
+        }
+
+        .wallet button.deposit {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .game-section {
+            background-color: #233469;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .game-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .timer {
+            background-color: #1b2c4d;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .balls {
+            display: flex;
+            justify-content: space-around;
             margin-bottom: 20px;
         }
 
-        .mobile-input label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .mobile-input input {
-            width: 250px;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            outline: none;
-        }
-
-        .otp-container {
+        .balls .ball {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ff4c4c;
             display: flex;
-            justify-content: space-between;
-            width: 250px;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
         }
 
-        .otp-input {
-            width: 50px;
-            height: 50px;
-            font-size: 24px;
-            text-align: center;
-            border: 1px solid #ccc;
+        .colors {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .colors .color-box {
+            width: 80px;
+            padding: 10px;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .colors .green {
+            background-color: #4caf50;
+        }
+
+        .colors .violet {
+            background-color: #9c27b0;
+        }
+
+        .colors .red {
+            background-color: #f44336;
+        }
+
+        .bet-options {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .bet-options button {
+            padding: 10px 20px;
+            border: none;
             border-radius: 5px;
-            outline: none;
+            cursor: pointer;
         }
 
-        .otp-input:focus {
-            border-color: #007bff;
+        .bet-options .big {
+            background-color: #ff9800;
+        }
+
+        .bet-options .small {
+            background-color: #03a9f4;
         }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <div class="mobile-input">
-            <label for="mobile-number">Mobile Number</label>
-            <input type="tel" id="mobile-number" placeholder="Enter mobile number" required>
+        <!-- Wallet Section -->
+        <div class="wallet">
+            <span>₹0.88 Wallet Balance</span>
+            <div>
+                <button class="withdraw">Withdraw</button>
+                <button class="deposit">Deposit</button>
+            </div>
         </div>
 
-        <div class="otp-container">
-            <input type="text" maxlength="1" class="otp-input" id="otp-1" autofocus>
-            <input type="text" maxlength="1" class="otp-input" id="otp-2">
-            <input type="text" maxlength="1" class="otp-input" id="otp-3">
-            <input type="text" maxlength="1" class="otp-input" id="otp-4">
+        <!-- Game Section -->
+        <div class="game-section">
+            <div class="game-title">Win Go 30s</div>
+            <div class="timer">Time Remaining: <span id="timer">30</span> seconds</div>
+
+            <!-- Balls Section -->
+            <div class="balls">
+                <div class="ball">0</div>
+                <div class="ball">1</div>
+                <div class="ball">2</div>
+                <div class="ball">3</div>
+                <div class="ball">4</div>
+            </div>
+
+            <!-- Colors Section -->
+            <div class="colors">
+                <div class="color-box green">Green</div>
+                <div class="color-box violet">Violet</div>
+                <div class="color-box red">Red</div>
+            </div>
+
+            <!-- Bet Options -->
+            <div class="bet-options">
+                <button class="big">Big</button>
+                <button class="small">Small</button>
+            </div>
         </div>
     </div>
 
     <script>
-        const otpInputs = document.querySelectorAll('.otp-input');
+        // Simple countdown timer
+        let timeLeft = 30;
+        const timerElement = document.getElementById("timer");
 
-        otpInputs.forEach((input, index) => {
-            input.addEventListener('input', (e) => {
-                const value = e.target.value;
-                if (value.length === 1) {
-                    if (index < otpInputs.length - 1) {
-                        otpInputs[index + 1].focus();
-                    }
-                } else if (value.length === 0 && index > 0) {
-                    otpInputs[index - 1].focus();
-                }
-            });
+        const countdown = setInterval(() => {
+            if (timeLeft > 0) {
+                timeLeft--;
+                timerElement.textContent = timeLeft;
+            } else {
+                clearInterval(countdown);
+                alert("Time is up!");
+            }
+        }, 1000);
 
-            input.addEventListener('keydown', (e) => {
-                if (e.key === 'Backspace' && e.target.value.length === 0 && index > 0) {
-                    otpInputs[index - 1].focus();
-                }
+        // Ball color click functionality
+        const colorBoxes = document.querySelectorAll('.color-box');
+        colorBoxes.forEach(box => {
+            box.addEventListener('click', function () {
+                alert('You selected: ' + this.textContent);
             });
         });
-    </script>
 
+        // Big and Small buttons
+        document.querySelector('.big').addEventListener('click', () => {
+            alert('You selected Big');
+        });
+
+        document.querySelector('.small').addEventListener('click', () => {
+            alert('You selected Small');
+        });
+    </script>
 </body>
 </html>
