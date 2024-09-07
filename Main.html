@@ -1,210 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tiranga Game Interface</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #0a1440;
-            margin: 0;
-            padding: 0;
-            color: white;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roulette Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #2c3e50;
+      color: #ecf0f1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
 
-        .container {
-            text-align: center;
-            padding: 20px;
-        }
+    .roulette-container {
+      text-align: center;
+    }
 
-        .wallet {
-            background-color: #233469;
-            padding: 10px;
-            border-radius: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 300px;
-            margin: 0 auto 20px;
-        }
+    .wheel {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      border: 10px solid #fff;
+      background-image: conic-gradient(red 10%, black 10% 20%, red 20% 30%, black 30% 40%, red 40% 50%, black 50% 60%, red 60% 70%, black 70% 80%, red 80% 90%, black 90% 100%);
+      margin-bottom: 20px;
+    }
 
-        .wallet button {
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+    .ball {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: white;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: spin 0s infinite;
+    }
 
-        .wallet button.withdraw {
-            background-color: #ff4c4c;
-            color: white;
-        }
+    .controls {
+      margin-top: 20px;
+    }
 
-        .wallet button.deposit {
-            background-color: #4caf50;
-            color: white;
-        }
+    #betInput {
+      padding: 5px;
+      font-size: 16px;
+    }
 
-        .game-section {
-            background-color: #233469;
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 400px;
-            margin: 0 auto;
-        }
+    #spinBtn {
+      padding: 10px 20px;
+      background-color: #16a085;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
 
-        .game-title {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
+    #spinBtn:hover {
+      background-color: #1abc9c;
+    }
 
-        .timer {
-            background-color: #1b2c4d;
-            padding: 10px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-size: 18px;
-        }
+    .result {
+      margin-top: 20px;
+      font-size: 24px;
+    }
 
-        .balls {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-        }
-
-        .balls .ball {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #ff4c4c;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            color: white;
-        }
-
-        .colors {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-        }
-
-        .colors .color-box {
-            width: 80px;
-            padding: 10px;
-            border-radius: 10px;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .colors .green {
-            background-color: #4caf50;
-        }
-
-        .colors .violet {
-            background-color: #9c27b0;
-        }
-
-        .colors .red {
-            background-color: #f44336;
-        }
-
-        .bet-options {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-        }
-
-        .bet-options button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .bet-options .big {
-            background-color: #ff9800;
-        }
-
-        .bet-options .small {
-            background-color: #03a9f4;
-        }
-    </style>
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Wallet Section -->
-        <div class="wallet">
-            <span>₹100938038.00 Wallet Balance</span>
-            <div>
-                <button class="withdraw">Withdraw</button>
-                <button class="deposit">Deposit</button>
-            </div>
-        </div>
-
-        <!-- Game Section -->
-        <div class="game-section">
-            <div class="game-title">Win Go 30s</div>
-            <div class="timer">Time Remaining: <span id="timer">30</span> seconds</div>
-
-            <!-- Balls Section -->
-            <div class="balls">
-                <div class="ball">0</div>
-                <div class="ball">1</div>
-                <div class="ball">2</div>
-                <div class="ball">3</div>
-                <div class="ball">4</div>
-            </div>
-
-            <!-- Colors Section -->
-            <div class="colors">
-                <div class="color-box green">Green</div>
-                <div class="color-box violet">Violet</div>
-                <div class="color-box red">Red</div>
-            </div>
-
-            <!-- Bet Options -->
-            <div class="bet-options">
-                <button class="big">Big</button>
-                <button class="small">Small</button>
-            </div>
-        </div>
+  <div class="roulette-container">
+    <h1>Roulette Game</h1>
+    <div class="wheel" id="rouletteWheel">
+      <div class="ball" id="ball"></div>
     </div>
 
-    <script>
-        // Simple countdown timer
-        let timeLeft = 30;
-        const timerElement = document.getElementById("timer");
+    <div class="controls">
+      <label for="betInput">Place your bet (0-36):</label>
+      <input type="number" id="betInput" min="0" max="36" value="0">
+      <button id="spinBtn">Spin the Wheel</button>
+    </div>
 
-        const countdown = setInterval(() => {
-            if (timeLeft > 0) {
-                timeLeft--;
-                timerElement.textContent = timeLeft;
-            } else {
-                clearInterval(countdown);
-                alert("Time is up!");
-            }
-        }, 1000);
+    <div class="result">
+      <h2 id="resultText">Result: -</h2>
+    </div>
+  </div>
 
-        // Ball color click functionality
-        const colorBoxes = document.querySelectorAll('.color-box');
-        colorBoxes.forEach(box => {
-            box.addEventListener('click', function () {
-                alert('You selected: ' + this.textContent);
-            });
-        });
+  <script>
+    const rouletteWheel = document.getElementById("rouletteWheel");
+    const ball = document.getElementById("ball");
+    const betInput = document.getElementById("betInput");
+    const spinBtn = document.getElementById("spinBtn");
+    const resultText = document.getElementById("resultText");
 
-        // Big and Small buttons
-        document.querySelector('.big').addEventListener('click', () => {
-            alert('You selected Big');
-        });
+    let isSpinning = false;
+    const totalNumbers = 37; // 0-36 on a roulette wheel
 
-        document.querySelector('.small').addEventListener('click', () => {
-            alert('You selected Small');
-        });
-    </script>
+    // Function to generate a random number between 0 and 36
+    function spinWheel() {
+      return Math.floor(Math.random() * totalNumbers);
+    }
+
+    // Function to animate the ball spinning
+    function animateBall(winningNumber) {
+      let spinDuration = 5; // 5 seconds for spinning
+      ball.style.animation = `spin ${spinDuration}s linear`;
+
+      setTimeout(() => {
+        ball.style.animation = ""; // Stop the spin animation after duration
+        displayResult(winningNumber);
+      }, spinDuration * 1000);
+    }
+
+    // Function to display result
+    function displayResult(winningNumber) {
+      const playerBet = parseInt(betInput.value);
+      resultText.textContent = `Result: ${winningNumber}`;
+
+      if (playerBet === winningNumber) {
+        alert(`Congratulations! You won. The ball landed on ${winningNumber}.`);
+      } else {
+        alert(`Sorry! You lost. The ball landed on ${winningNumber}.`);
+      }
+    }
+
+    // Event listener for spin button
+    spinBtn.addEventListener("click", () => {
+      if (isSpinning) return; // Prevent multiple spins at the same time
+
+      isSpinning = true;
+      const winningNumber = spinWheel(); // Get random number for the spin
+      animateBall(winningNumber);
+
+      // Reset the spinning flag after the animation is done
+      setTimeout(() => {
+        isSpinning = false;
+      }, 5000);
+    });
+  </script>
 </body>
 </html>
